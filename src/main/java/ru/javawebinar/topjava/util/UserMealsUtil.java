@@ -69,7 +69,7 @@ public class UserMealsUtil {
             }
 
             if (TimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalTime(), startTime, endTime)) {
-                UserMealWithExcess userMealWithExcess = convertUserMealToUserMealWithExcess(meal, false);
+                UserMealWithExcess userMealWithExcess = convertUserMealToUserMealWithExcess(meal, mealMap.get(localDate).getValue() > caloriesPerDay);
                 mealMap.get(localDate).getKey().add(userMealWithExcess);
                 mealWithExcessList.add(userMealWithExcess);
             }
