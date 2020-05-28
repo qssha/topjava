@@ -123,9 +123,9 @@ public class UserMealsUtil {
                 .values().stream()
                 .collect(Collector.of(
                         ArrayList::new,
-                        (userMeals, e) -> {
-                            boolean excess = e.getValue() > caloriesPerDay;
-                            e.getKey().forEach(x -> userMeals.add(convertUserMealToUserMealWithExcess(x, excess)));
+                        (userMeals, sumListEntry) -> {
+                            boolean excess = sumListEntry.getValue() > caloriesPerDay;
+                            sumListEntry.getKey().forEach(x -> userMeals.add(convertUserMealToUserMealWithExcess(x, excess)));
                         },
                         (part1, part2) -> {
                             part1.addAll(part2);
