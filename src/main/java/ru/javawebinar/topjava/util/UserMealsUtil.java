@@ -25,18 +25,18 @@ public class UserMealsUtil {
                 new UserMeal(LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410)
         );
 
-        List<UserMealWithExcess> mealsTo = filteredByCycles(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
-        mealsTo.forEach(System.out::println);
+        //List<UserMealWithExcess> mealsTo = filteredByCycles(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
+        //mealsTo.forEach(System.out::println);
 
-        List<UserMealWithExcess> mealsToSecond = filteredByOneCycle(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
-        mealsToSecond.forEach(System.out::println);
+        //List<UserMealWithExcess> mealsToSecond = filteredByOneCycle(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
+        //mealsToSecond.forEach(System.out::println);
 
-        List<UserMealWithExcess> mealsToThird = filteredByOneCycleAlternative(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
-        mealsToThird.forEach(System.out::println);
+        //List<UserMealWithExcess> mealsToThird = filteredByOneCycleAlternative(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
+        //mealsToThird.forEach(System.out::println);
 
         System.out.println(filteredByStreams(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
 
-        System.out.println(filteredByStreamsSimple(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
+        //System.out.println(filteredByStreamsSimple(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
     }
 
     public static List<UserMealWithExcess> filteredByCycles(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
@@ -94,13 +94,12 @@ public class UserMealsUtil {
                 return prev;
             });
 
-            if (mealMap.get(localDate).getValue() > caloriesPerDay) {
+            if (!mealMap.get(localDate).getKey().isBool() && mealMap.get(localDate).getValue() > caloriesPerDay) {
                 mealMap.get(localDate).getKey().setBool(true);
             }
 
             if (TimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalTime(), startTime, endTime)) {
-                UserMealWithExcess userMealWithExcess = convertUserMealToUserMealWithExcessWrapper(meal, mealMap.get(localDate).getKey());
-                mealWithExcessList.add(userMealWithExcess);
+                mealWithExcessList.add(convertUserMealToUserMealWithExcessWrapper(meal, mealMap.get(localDate).getKey()));
             }
         }
         return mealWithExcessList;
@@ -111,10 +110,10 @@ public class UserMealsUtil {
                 .collect(Collectors.groupingBy(x -> x.getDateTime().toLocalDate(),
                         Collector.of(
                                 () -> new AbstractMap.SimpleEntry<>(new ArrayList<UserMeal>(), 0),
-                                (entry, e) -> {
-                                    entry.setValue(entry.getValue() + e.getCalories());
-                                    if (TimeUtil.isBetweenHalfOpen(e.getDateTime().toLocalTime(), startTime, endTime))
-                                        entry.getKey().add(e);
+                                (sumListEntry, userMeal) -> {
+                                    sumListEntry.setValue(sumListEntry.getValue() + userMeal.getCalories());
+                                    if (TimeUtil.isBetweenHalfOpen(userMeal.getDateTime().toLocalTime(), startTime, endTime))
+                                        sumListEntry.getKey().add(userMeal);
                                 },
                                 (part1, part2) -> {
                                     part1.setValue(part1.getValue() + part2.getValue());
