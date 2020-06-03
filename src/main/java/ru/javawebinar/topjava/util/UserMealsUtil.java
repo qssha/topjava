@@ -151,8 +151,10 @@ public class UserMealsUtil {
                                     return part1;
                                 })))
                 .values().stream()
-                .flatMap(sumListEntry -> {if (sumListEntry.getValue() > caloriesPerDay) sumListEntry.getKey().forEach(x -> x.setExcess(true));
-                return sumListEntry.getKey().stream();}).collect(Collectors.toList());
+                .flatMap(sumListEntry -> {
+                    if (sumListEntry.getValue() > caloriesPerDay) sumListEntry.getKey().forEach(x -> x.setExcess(true));
+                    return sumListEntry.getKey().stream();
+                }).collect(Collectors.toList());
     }
 
     public static List<UserMealWithExcess> filteredByStreamsSimple(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
