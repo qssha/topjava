@@ -34,7 +34,9 @@ public class UserMealsUtil {
         //List<UserMealWithExcess> mealsToThird = filteredByOneCycleAlternative(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
         //mealsToThird.forEach(System.out::println);
 
-        System.out.println(filteredByStreams(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
+        //System.out.println(filteredByStreams(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
+
+        System.out.println(filteredByStreamsImproved(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
 
         //System.out.println(filteredByStreamsSimple(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
     }
@@ -131,6 +133,26 @@ public class UserMealsUtil {
                             part1.addAll(part2);
                             return part1;
                         }));
+    }
+
+    public static List<UserMealWithExcess> filteredByStreamsImproved(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+        return meals.stream()
+                .collect(Collectors.groupingBy(x -> x.getDateTime().toLocalDate(),
+                        Collector.of(
+                                () -> new AbstractMap.SimpleEntry<>(new ArrayList<UserMealWithExcess>(), 0),
+                                (sumListEntry, userMeal) -> {
+                                    sumListEntry.setValue(sumListEntry.getValue() + userMeal.getCalories());
+                                    if (TimeUtil.isBetweenHalfOpen(userMeal.getDateTime().toLocalTime(), startTime, endTime))
+                                        sumListEntry.getKey().add(convertUserMealToUserMealWithExcess(userMeal, false));
+                                },
+                                (part1, part2) -> {
+                                    part1.setValue(part1.getValue() + part2.getValue());
+                                    part1.getKey().addAll(part2.getKey());
+                                    return part1;
+                                })))
+                .values().stream()
+                .flatMap(sumListEntry -> {if (sumListEntry.getValue() > caloriesPerDay) sumListEntry.getKey().forEach(x -> x.setExcess(true));
+                return sumListEntry.getKey().stream();}).collect(Collectors.toList());
     }
 
     public static List<UserMealWithExcess> filteredByStreamsSimple(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
