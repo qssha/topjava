@@ -16,44 +16,46 @@ public class MealDaoMapImpl implements MealDao {
 
     static {
         Meal meal = new Meal(idCount.getAndIncrement(), LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500);
-        mealMap.put(meal.getMealId(), meal);
+        mealMap.put(meal.getId(), meal);
         meal = new Meal(idCount.getAndIncrement(), LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000);
-        mealMap.put(meal.getMealId(), meal);
+        mealMap.put(meal.getId(), meal);
         meal = new Meal(idCount.getAndIncrement(), LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Ужин", 500);
-        mealMap.put(meal.getMealId(), meal);
+        mealMap.put(meal.getId(), meal);
         meal = new Meal(idCount.getAndIncrement(), LocalDateTime.of(2020, Month.JANUARY, 31, 0, 0), "Еда на граничное значение", 100);
-        mealMap.put(meal.getMealId(), meal);
+        mealMap.put(meal.getId(), meal);
         meal = new Meal(idCount.getAndIncrement(), LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак", 1000);
-        mealMap.put(meal.getMealId(), meal);
+        mealMap.put(meal.getId(), meal);
         meal = new Meal(idCount.getAndIncrement(), LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500);
-        mealMap.put(meal.getMealId(), meal);
+        mealMap.put(meal.getId(), meal);
         meal = new Meal(idCount.getAndIncrement(), LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410);
-        mealMap.put(meal.getMealId(), meal);
+        mealMap.put(meal.getId(), meal);
     }
 
     @Override
-    public void addMeal(Meal meal) {
-        meal.setMealId(idCount.getAndIncrement());
-        mealMap.put(meal.getMealId(), meal);
+    public Meal add(Meal meal) {
+        meal.setId(idCount.getAndIncrement());
+        mealMap.put(meal.getId(), meal);
+        return meal;
     }
 
     @Override
-    public void deleteMeal(int mealId) {
-        mealMap.remove(mealId);
+    public void delete(int id) {
+        mealMap.remove(id);
     }
 
     @Override
-    public void updateMeal(Meal meal) {
-        mealMap.put(meal.getMealId(), meal);
+    public Meal update(Meal meal) {
+        mealMap.put(meal.getId(), meal);
+        return meal;
     }
 
     @Override
-    public List<Meal> getAllMeals() {
+    public List<Meal> getAll() {
         return new ArrayList<>(mealMap.values());
     }
 
     @Override
-    public Meal getMealById(int mealId) {
-        return mealMap.get(mealId);
+    public Meal getById(int id) {
+        return mealMap.get(id);
     }
 }

@@ -3,7 +3,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html lang="ru">
 <head>
-    <title>Users</title>
+    <title>Meals</title>
 </head>
 <body>
 <h3><a href="index.html">Home</a></h3>
@@ -21,14 +21,14 @@
     </thead>
     <tbody>
     <c:forEach items="${meals}" var="meal">
-        <tr bgcolor="${meal.excess ? "lightpink" : "white"}">
+        <tr bgcolor="${meal.excess ? "lightpink" : "lightgreen"}">
             <td><fmt:parseDate value="${meal.dateTime}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
-                <fmt:formatDate value="${parsedDateTime}" pattern="dd.MM.yyyy HH:mm" />
+                <fmt:formatDate value="${parsedDateTime}" pattern="yyyy-MM-dd HH:mm" />
             </td>
-            <td><c:out value="${meal.description}" /></td>
-            <td><c:out value="${meal.calories}" /></td>
-            <td><a href="meals?action=edit&mealId=<c:out value="${meal.mealId}"/>">Update</a></td>
-            <td><a href="meals?action=delete&mealId=<c:out value="${meal.mealId}"/>">Delete</a></td>
+            <td>${meal.description}</td>
+            <td>${meal.calories}</td>
+            <td><a href="meals?action=edit&id=${meal.id}">Update</a></td>
+            <td><a href="meals?action=delete&id=${meal.id}">Delete</a></td>
         </tr>
     </c:forEach>
     </tbody>

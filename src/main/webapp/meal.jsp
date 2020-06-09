@@ -8,17 +8,14 @@
 <body>
 
 <form method="POST" action='meals' name="addMealForm">
-    Meal ID : <input type="text" readonly="readonly" name="mealId"
-                     value="<c:out value="${meal.mealId}" />" /> <br />
-    Meal time : <input
-        type="datetime-local" name="dateTime"
-        value="${meal.dateTime}" /> <br />
-    Description : <input
-        type="text" name="description"
-        value="<c:out value="${meal.description}" />" /> <br />
+    <input type="hidden"  name="id" value=${meal.id} >
+    Meal time : <input type="datetime-local" name="dateTime"
+        value="${meal.dateTime}" > <br />
+    Description : <input type="text" name="description"
+        value=${meal.description} > <br />
     Calories : <input type="text" name="calories"
-                   value="<c:out value="${meal.calories}" />" /> <br />
-    <input type="submit" value="Submit" />
+                      value=${meal.calories} > <br />
+    <input type="submit" value="Submit" >
 </form>
 
 </body>
