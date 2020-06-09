@@ -11,24 +11,17 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MealDaoMapImpl implements MealDao {
-    private static final AtomicInteger idCount = new AtomicInteger(0);
-    private static final Map<Integer, Meal> mealMap = new ConcurrentHashMap<>();
+    private final AtomicInteger idCount = new AtomicInteger(0);
+    private final Map<Integer, Meal> mealMap = new ConcurrentHashMap<>();
 
-    static {
-        Meal meal = new Meal(idCount.getAndIncrement(), LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500);
-        mealMap.put(meal.getId(), meal);
-        meal = new Meal(idCount.getAndIncrement(), LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000);
-        mealMap.put(meal.getId(), meal);
-        meal = new Meal(idCount.getAndIncrement(), LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Ужин", 500);
-        mealMap.put(meal.getId(), meal);
-        meal = new Meal(idCount.getAndIncrement(), LocalDateTime.of(2020, Month.JANUARY, 31, 0, 0), "Еда на граничное значение", 100);
-        mealMap.put(meal.getId(), meal);
-        meal = new Meal(idCount.getAndIncrement(), LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак", 1000);
-        mealMap.put(meal.getId(), meal);
-        meal = new Meal(idCount.getAndIncrement(), LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500);
-        mealMap.put(meal.getId(), meal);
-        meal = new Meal(idCount.getAndIncrement(), LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410);
-        mealMap.put(meal.getId(), meal);
+     {
+        add(new Meal(idCount.getAndIncrement(), LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500));
+        add(new Meal(idCount.getAndIncrement(), LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000));
+        add(new Meal(idCount.getAndIncrement(), LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Ужин", 500));
+        add(new Meal(idCount.getAndIncrement(), LocalDateTime.of(2020, Month.JANUARY, 31, 0, 0), "Еда на граничное значение", 100));
+        add(new Meal(idCount.getAndIncrement(), LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак", 1000));
+        add(new Meal(idCount.getAndIncrement(), LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500));
+        add(new Meal(idCount.getAndIncrement(), LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410));
     }
 
     @Override
