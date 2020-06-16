@@ -60,7 +60,7 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public Collection<Meal> getFiltered(Integer userId, LocalDate startDate, LocalDate endDate) {
         return getAll(userId).stream()
-                .filter(x -> DateTimeUtil.isBetweenHalfOpen(x.getDate(), startDate, endDate))
+                .filter(x -> DateTimeUtil.isBetweenHalfOpen(x.getDate(), startDate, endDate.plusDays(1)))
                 .collect(Collectors.toList());
     }
 }

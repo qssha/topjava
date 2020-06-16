@@ -39,12 +39,12 @@ public class MealService {
         return MealsUtil.getTos(repository.getAll(userId), caloriesPerDay);
     }
 
-    public Collection<MealTo> getFiltered(Integer userId, int caloriesPerDay, LocalDate startDate, LocalTime startTime, LocalTime endTime, LocalDate endDate) {
+    public Collection<MealTo> getFiltered(Integer userId, int caloriesPerDay, LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
         if (startDate == null && startTime == null && endDate == null && endTime == null) return getAll(userId, caloriesPerDay);
 
         if (startDate == null) startDate = LocalDate.MIN;
         if (startTime == null) startTime = LocalTime.MIN;
-        if (endDate == null) endDate = LocalDate.MAX;
+        if (endDate == null) endDate = LocalDate.MAX.minusDays(1);
         if (endTime == null) endTime = LocalTime.MAX;
 
         return MealsUtil.getFilteredTos(repository.getFiltered(userId, startDate, endDate),

@@ -25,31 +25,31 @@ public class MealRestController {
 
     public Meal create(Meal meal) {
         log.info("create {}", meal);
-        return service.create(meal, SecurityUtil.authUserId());
+        return service.create(meal, SecurityUtil.getAuthUserId());
     }
 
     public void delete(int id) {
         log.info("delete {}", id);
-        service.delete(id, SecurityUtil.authUserId());
+        service.delete(id, SecurityUtil.getAuthUserId());
     }
 
     public Meal get(int id) {
         log.info("get {}", id);
-        return service.get(id, SecurityUtil.authUserId());
+        return service.get(id, SecurityUtil.getAuthUserId());
     }
 
     public Collection<MealTo> getAll() {
         log.info("getAll");
-        return service.getAll(SecurityUtil.authUserId(), SecurityUtil.authUserCaloriesPerDay());
+        return service.getAll(SecurityUtil.getAuthUserId(), SecurityUtil.authUserCaloriesPerDay());
     }
 
-    public Collection<MealTo> getFiltered(LocalDate startDate, LocalTime startTime, LocalTime endTime, LocalDate endDate) {
+    public Collection<MealTo> getFiltered(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
         log.info("getFiltered");
-        return service.getAll(SecurityUtil.authUserId(), SecurityUtil.authUserCaloriesPerDay());
+        return service.getFiltered(SecurityUtil.getAuthUserId(), SecurityUtil.authUserCaloriesPerDay(), startDate, startTime, endDate, endTime);
     }
 
     public void update(Meal meal) {
         log.info("update {}", meal);
-        service.update(meal, SecurityUtil.authUserId());
+        service.update(meal, SecurityUtil.getAuthUserId());
     }
 }
