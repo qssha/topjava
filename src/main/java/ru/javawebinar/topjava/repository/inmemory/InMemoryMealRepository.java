@@ -7,16 +7,16 @@ import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryMealRepository implements MealRepository {
-    private Map<Integer, Meal> repository = new ConcurrentHashMap<>();
+    private Map<Integer, Map<Integer, Meal>> repository = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
 
     {
@@ -24,44 +24,55 @@ public class InMemoryMealRepository implements MealRepository {
     }
 
     @Override
-    public Meal save(Meal meal, Integer userId) {
-        if (!meal.getUserId().equals(userId)) return null;
+    public Meal save(Meal meal, int userId) {
+        if (meal == null || meal.getUserId() != userId) return null;
 
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
-            repository.put(meal.getId(), meal);
+            repository.putIfAbsent(userId, new HashMap<>());
+            repository.get(userId).put(meal.getId(), meal);
             return meal;
         }
         // handle case: update, but not present in storage
-        if (!meal.getUserId().equals(userId)) return null;
-        return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
+        return repository.get(userId).computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
     }
 
     @Override
-    public boolean delete(int id, Integer userId) {
-        if (repository.get(id) == null || !repository.get(id).getUserId().equals(userId)) return false;
-        return repository.remove(id) != null;
+    public boolean delete(int id, int userId) {
+        Map<Integer, Meal> mealMap = repository.get(userId);
+        if (mealMap == null) return false;
+        Meal meal = mealMap.get(id);
+        if (meal == null || meal.getUserId() != userId) return false;
+        return mealMap.remove(id) != null;
     }
 
     @Override
-    public Meal get(int id, Integer userId) {
-        if (repository.get(id) == null || !repository.get(id).getUserId().equals(userId)) return null;
-        return repository.get(id);
+    public Meal get(int id, int userId) {
+        Map<Integer, Meal> mealMap = repository.get(userId);
+        if (mealMap == null) return null;
+        Meal meal = mealMap.get(id);
+        if (meal == null || meal.getUserId() != userId) return null;
+        return meal;
     }
 
     @Override
-    public Collection<Meal> getAll(Integer userId) {
-        return repository.values().stream()
-                .filter(x -> x.getUserId().equals(userId))
-                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
-                .collect(Collectors.toList());
+    public List<Meal> getAll(int userId) {
+        return getMeals(userId, x -> true);
     }
 
     @Override
-    public Collection<Meal> getFiltered(Integer userId, LocalDate startDate, LocalDate endDate) {
-        return getAll(userId).stream()
-                .filter(x -> DateTimeUtil.isBetweenHalfOpen(x.getDate(), startDate, endDate.plusDays(1)))
-                .collect(Collectors.toList());
+    public List<Meal> getFiltered(int userId, LocalDate startDate, LocalDate endDate) {
+        return getMeals(userId,
+                x -> DateTimeUtil.isBetweenHalfOpen(x.getDate(), startDate, endDate.equals(LocalDate.MAX) ? endDate : endDate.plusDays(1)));
+    }
+
+    private List<Meal> getMeals(int userId, Predicate<? super Meal> predicate) {
+        Map<Integer, Meal> mealMap = repository.get(userId);
+        return mealMap == null ? Collections.emptyList() :
+                repository.get(userId).values().stream()
+                        .filter(predicate)
+                        .sorted(Comparator.comparing(Meal::getDateTime).reversed())
+                        .collect(Collectors.toList());
     }
 }
 

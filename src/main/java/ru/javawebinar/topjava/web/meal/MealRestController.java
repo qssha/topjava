@@ -10,7 +10,7 @@ import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Collection;
+import java.util.List;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 
@@ -38,18 +38,18 @@ public class MealRestController {
         return service.get(id, SecurityUtil.getAuthUserId());
     }
 
-    public Collection<MealTo> getAll() {
+    public List<MealTo> getAll() {
         log.info("getAll");
         return service.getAll(SecurityUtil.getAuthUserId(), SecurityUtil.authUserCaloriesPerDay());
     }
 
-    public Collection<MealTo> getFiltered(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
+    public List<MealTo> getFiltered(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
         log.info("getFiltered");
         return service.getFiltered(SecurityUtil.getAuthUserId(), SecurityUtil.authUserCaloriesPerDay(), startDate, startTime, endDate, endTime);
     }
 
-    public void update(Meal meal) {
+    public void update(Meal meal, int id) {
         log.info("update {}", meal);
-        service.update(meal, SecurityUtil.getAuthUserId());
+        service.update(meal, id, SecurityUtil.getAuthUserId());
     }
 }

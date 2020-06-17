@@ -53,13 +53,18 @@ public class InMemoryUserRepository implements UserRepository {
         return repository
                 .values()
                 .stream()
-                .sorted(Comparator.comparing(AbstractNamedEntity::getName).thenComparing(AbstractBaseEntity::getId))
+                .sorted(Comparator.comparing(User::getName).thenComparing(User::getEmail))
                 .collect(Collectors.toList());
     }
 
     @Override
     public User getByEmail(String email) {
         log.info("getByEmail {}", email);
-        return repository.values().stream().filter(x -> x.getEmail().equals(email)).findAny().orElse(null);
+        return repository
+                .values()
+                .stream()
+                .filter(x -> x.getEmail().equals(email))
+                .findAny()
+                .orElse(null);
     }
 }
