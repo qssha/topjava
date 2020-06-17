@@ -54,13 +54,13 @@ public class InMemoryMealRepository implements MealRepository {
 
     @Override
     public List<Meal> getAll(int userId) {
-        return getMeals(userId, x -> true);
+        return getMeals(userId, meal -> true);
     }
 
     @Override
     public List<Meal> getFiltered(int userId, LocalDate startDate, LocalDate endDate) {
         return getMeals(userId,
-                x -> DateTimeUtil.isBetweenHalfOpen(x.getDate(), startDate, endDate.equals(LocalDate.MAX) ? endDate : endDate.plusDays(1)));
+                meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDate(), startDate, endDate.equals(LocalDate.MAX) ? endDate : endDate.plusDays(1)));
     }
 
     private List<Meal> getMeals(int userId, Predicate<? super Meal> predicate) {
