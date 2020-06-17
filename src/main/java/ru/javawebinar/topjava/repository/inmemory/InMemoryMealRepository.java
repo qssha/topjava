@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -20,7 +19,9 @@ public class InMemoryMealRepository implements MealRepository {
     private AtomicInteger counter = new AtomicInteger(0);
 
     {
-        MealsUtil.MEALS.forEach(x -> save(x, x.getUserId()));
+        MealsUtil.MEALS.forEach(meal ->
+        {if (MealsUtil.MEALS.indexOf(meal) < 3) save(meal, 1);
+        else save(meal, 2);});
     }
 
     @Override
@@ -29,13 +30,12 @@ public class InMemoryMealRepository implements MealRepository {
 
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
-            meal.setUserId(userId);
-            repository.putIfAbsent(userId, new HashMap<>());
-            repository.get(userId).put(meal.getId(), meal);
+            repository.computeIfAbsent(userId, mealMap -> new HashMap<>()).put(meal.getId(), meal);
             return meal;
         }
         // handle case: update, but not present in storage
-        return repository.get(userId).computeIfPresent(meal.getId(), (id, oldMeal) -> {meal.setUserId(userId); return meal;});
+        Map<Integer, Meal> mealMap = repository.get(userId);
+        return mealMap == null? null : mealMap.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
     }
 
     @Override
@@ -43,17 +43,13 @@ public class InMemoryMealRepository implements MealRepository {
         Map<Integer, Meal> mealMap = repository.get(userId);
         if (mealMap == null) return false;
         Meal meal = mealMap.get(id);
-        if (meal == null || meal.getUserId() != userId) return false;
-        return mealMap.remove(id) != null;
+        return meal != null && mealMap.remove(id) != null;
     }
 
     @Override
     public Meal get(int id, int userId) {
         Map<Integer, Meal> mealMap = repository.get(userId);
-        if (mealMap == null) return null;
-        Meal meal = mealMap.get(id);
-        if (meal == null || meal.getUserId() != userId) return null;
-        return meal;
+        return mealMap == null ? null : mealMap.get(id);
     }
 
     @Override

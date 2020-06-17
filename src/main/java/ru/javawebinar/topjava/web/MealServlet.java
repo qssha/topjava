@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.util.StringUtils;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 
@@ -45,8 +46,7 @@ public class MealServlet extends HttpServlet {
         Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
-                Integer.parseInt(request.getParameter("calories")),
-                null);
+                Integer.parseInt(request.getParameter("calories")));
 
         if (meal.isNew()) {
             log.info("Create {}", meal);
@@ -81,10 +81,10 @@ public class MealServlet extends HttpServlet {
             case "all":
             default:
                 log.info("getAll");
-                LocalDate startDate = request.getParameter("startDate") == null || "".equals(request.getParameter("startDate")) ? null : LocalDate.parse(request.getParameter("startDate"));
-                LocalDate endDate = request.getParameter("endDate") == null || "".equals(request.getParameter("endDate")) ? null : LocalDate.parse(request.getParameter("endDate"));
-                LocalTime startTime = request.getParameter("startTime") == null || "".equals(request.getParameter("startTime")) ? null : LocalTime.parse(request.getParameter("startTime"));
-                LocalTime endTime = request.getParameter("endTime") == null || "".equals(request.getParameter("endTime")) ? null : LocalTime.parse(request.getParameter("endTime"));
+                LocalDate startDate = StringUtils.isEmpty(request.getParameter("startDate")) ? null : LocalDate.parse(request.getParameter("startDate"));
+                LocalDate endDate = StringUtils.isEmpty(request.getParameter("endDate")) ? null : LocalDate.parse(request.getParameter("endDate"));
+                LocalTime startTime = StringUtils.isEmpty(request.getParameter("startTime")) ? null : LocalTime.parse(request.getParameter("startTime"));
+                LocalTime endTime = StringUtils.isEmpty(request.getParameter("endTime")) ? null : LocalTime.parse(request.getParameter("endTime"));
 
                 request.setAttribute("meals", controller.getFiltered(startDate, startTime, endDate, endTime));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);

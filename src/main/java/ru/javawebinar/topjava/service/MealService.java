@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
@@ -50,8 +49,7 @@ public class MealService {
                 caloriesPerDay, startTime, endTime);
     }
 
-    public void update(Meal meal, int id, int userId) {
-        checkNotFoundWithId(repository.get(id, userId), id);
+    public void update(Meal meal, int userId) {
         checkNotFoundWithId(repository.save(meal, userId), meal.getId());
     }
 }

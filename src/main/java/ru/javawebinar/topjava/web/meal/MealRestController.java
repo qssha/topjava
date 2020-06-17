@@ -12,6 +12,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
+import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
+
 @Controller
 public class MealRestController {
     private final Logger log = LoggerFactory.getLogger(getClass());
@@ -23,6 +26,7 @@ public class MealRestController {
 
     public Meal create(Meal meal) {
         log.info("create {}", meal);
+        checkNew(meal);
         return service.create(meal, SecurityUtil.getAuthUserId());
     }
 
@@ -48,6 +52,7 @@ public class MealRestController {
 
     public void update(Meal meal, int id) {
         log.info("update {}", meal);
-        service.update(meal, id, SecurityUtil.getAuthUserId());
+        assureIdConsistent(meal, id);
+        service.update(meal, SecurityUtil.getAuthUserId());
     }
 }
