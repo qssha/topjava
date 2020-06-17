@@ -22,23 +22,23 @@ public class MealService {
         this.repository = repository;
     }
 
-    public Meal create(Meal meal, Integer userId) {
+    public Meal create(Meal meal, int userId) {
         return repository.save(meal, userId);
     }
 
-    public void delete(int id, Integer userId) {
+    public void delete(int id, int userId) {
         checkNotFoundWithId(repository.delete(id, userId), id);
     }
 
-    public Meal get(int id, Integer userId) {
+    public Meal get(int id, int userId) {
         return checkNotFoundWithId(repository.get(id , userId), id);
     }
 
-    public List<MealTo> getAll(Integer userId, int caloriesPerDay) {
+    public List<MealTo> getAll(int userId, int caloriesPerDay) {
         return MealsUtil.getTos(repository.getAll(userId), caloriesPerDay);
     }
 
-    public List<MealTo> getFiltered(Integer userId, int caloriesPerDay, LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
+    public List<MealTo> getFiltered(int userId, int caloriesPerDay, LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
         if (startDate == null && startTime == null && endDate == null && endTime == null) return getAll(userId, caloriesPerDay);
 
         if (startDate == null) startDate = LocalDate.MIN;
@@ -50,7 +50,7 @@ public class MealService {
                 caloriesPerDay, startTime, endTime);
     }
 
-    public void update(Meal meal, int id, Integer userId) {
+    public void update(Meal meal, int id, int userId) {
         checkNotFoundWithId(repository.get(id, userId), id);
         checkNotFoundWithId(repository.save(meal, userId), meal.getId());
     }

@@ -12,8 +12,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
-
 @Controller
 public class MealRestController {
     private final Logger log = LoggerFactory.getLogger(getClass());
