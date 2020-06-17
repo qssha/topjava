@@ -24,6 +24,7 @@
     <a href="meals?action=create">Add Meal</a>
     <br><br>
     <form action="meals" method="GET">
+        <input type="hidden" name="action" value="filter">
         From date: <input type="date" value="${param.startDate}" name="startDate"> To date: <input type="date" value="${param.endDate}" name="endDate"/>
         <br>
         From time: <input type="time" value="${param.startTime}" name="startTime"> To time: <input type="time" value="${param.endTime}" name="endTime">

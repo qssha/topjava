@@ -20,8 +20,13 @@ public class InMemoryMealRepository implements MealRepository {
 
     {
         MealsUtil.MEALS.forEach(meal ->
-        {if (MealsUtil.MEALS.indexOf(meal) < 3) save(meal, 1);
-        else save(meal, 2);});
+        {
+            if (MealsUtil.MEALS.indexOf(meal) < 3) {
+                save(meal, 1);
+            } else {
+                save(meal, 2);
+            }
+        });
     }
 
     @Override
@@ -35,15 +40,14 @@ public class InMemoryMealRepository implements MealRepository {
         }
         // handle case: update, but not present in storage
         Map<Integer, Meal> mealMap = repository.get(userId);
-        return mealMap == null? null : mealMap.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
+        return mealMap == null ? null : mealMap.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
     }
 
     @Override
     public boolean delete(int id, int userId) {
         Map<Integer, Meal> mealMap = repository.get(userId);
         if (mealMap == null) return false;
-        Meal meal = mealMap.get(id);
-        return meal != null && mealMap.remove(id) != null;
+        return mealMap.remove(id) != null;
     }
 
     @Override
