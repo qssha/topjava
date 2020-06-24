@@ -4,7 +4,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -13,7 +12,8 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNull;
@@ -38,54 +38,63 @@ public class MealServiceTest {
     @Autowired
     private MealService service;
 
-    @Qualifier("jdbcMealRepository")
     @Autowired
     private MealRepository repository;
 
     @Test
     public void get() {
-        Meal meal = service.get(USER_MEAL_ID, USER_ID);
-        assertThat(meal).isEqualTo(USER_MEAL);
+        Meal meal = service.get(USER_MEAL_FIRST_ID, USER_ID);
+        assertThat(meal).isEqualToComparingFieldByField(USER_MEAL_FIRST);
     }
 
     @Test
     public void delete() {
-        service.delete(USER_MEAL_ID, USER_ID);
-        assertNull(repository.get(USER_MEAL_ID, USER_ID));
+        service.delete(USER_MEAL_FIRST_ID, USER_ID);
+        assertNull(repository.get(USER_MEAL_FIRST_ID, USER_ID));
     }
 
     @Test
     public void getBetweenInclusive() {
-        assertThat(service.getBetweenInclusive(getDate(), null, USER_ID)).isEqualTo(Collections.EMPTY_LIST);
+        List<Meal> expectedMeals = Arrays.asList(ADMIN_MEAL_SECOND, ADMIN_MEAL_FIRST);
+        List<Meal> actualMeals = service.getBetweenInclusive(null, getDate(), ADMIN_ID);
+        assertThat(expectedMeals.size()).isEqualTo(actualMeals.size());
+        for (int i = 0; i < expectedMeals.size(); i++) {
+            assertThat(expectedMeals.get(i)).isEqualToComparingFieldByField(actualMeals.get(i));
+        }
     }
 
     @Test
     public void getAll() {
-        assertThat(service.getAll(USER_ID)).isEqualTo(Collections.singletonList(USER_MEAL));
+        List<Meal> expectedMeals = Arrays.asList(USER_MEAL_THIRD, USER_MEAL_SECOND, USER_MEAL_FIRST);
+        List<Meal> actualMeals = service.getAll(USER_ID);
+        assertThat(expectedMeals.size()).isEqualTo(actualMeals.size());
+        for (int i = 0; i < expectedMeals.size(); i++) {
+            assertThat(expectedMeals.get(i)).isEqualToComparingFieldByField(actualMeals.get(i));
+        }
     }
 
     @Test
     public void update() {
         Meal updated = getUpdated();
         service.update(updated, USER_ID);
-        assertThat(service.get(USER_MEAL_ID, USER_ID)).isEqualTo(updated);
+        assertThat(service.get(USER_MEAL_FIRST_ID, USER_ID)).isEqualToComparingFieldByField(updated);
     }
 
     @Test
     public void create() {
         Meal meal = getNew();
         Meal createdMeal = service.create(meal, USER_ID);
-        assertThat(createdMeal).isEqualTo(meal);
+        assertThat(createdMeal).isEqualToComparingFieldByField(meal);
     }
 
     @Test
     public void getWrongMeal() {
-        assertThrows(NotFoundException.class, () -> service.get(USER_MEAL_ID, ADMIN_ID));
+        assertThrows(NotFoundException.class, () -> service.get(USER_MEAL_FIRST_ID, ADMIN_ID));
     }
 
     @Test
     public void deleteWrongMeal() {
-        assertThrows(NotFoundException.class, () -> service.delete(USER_MEAL_ID, ADMIN_ID));
+        assertThrows(NotFoundException.class, () -> service.delete(USER_MEAL_FIRST_ID, ADMIN_ID));
     }
 
     @Test

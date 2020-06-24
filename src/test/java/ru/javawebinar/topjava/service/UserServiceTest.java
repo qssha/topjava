@@ -4,7 +4,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -38,7 +37,6 @@ public class UserServiceTest {
     @Autowired
     private UserService service;
 
-    @Qualifier("jdbcUserRepository")
     @Autowired
     private UserRepository repository;
 
