@@ -1,7 +1,9 @@
 package ru.javawebinar.topjava.service;
 
 import org.junit.*;
+import org.junit.rules.Stopwatch;
 import org.junit.rules.TestName;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +20,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
@@ -32,30 +35,39 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
     private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
-    public static Map<String, Long> testTime = new HashMap<>();
+    private static final StringBuilder logTimeString = new StringBuilder();
 
-    private long start;
-
-    @Rule
-    public final TestName name = new TestName();
-
-    @Before
-    public void start() {
-        start = System.currentTimeMillis();
-    }
-
-    @After
-    public void end() {
-        testTime.put(name.getMethodName(), System.currentTimeMillis() - start);
+    private static void logInfo(Description description, String status, long nanos) {
+        String testName = description.getMethodName();
+        log.info(String.format("Test %s %d ms",
+                testName, TimeUnit.NANOSECONDS.toMillis(nanos)));
+        logTimeString.append(String.format("Test %30s %6d ms\n",
+                testName, TimeUnit.NANOSECONDS.toMillis(nanos)));
     }
 
     @AfterClass
-    public static void logTestTime() {
-        for (Map.Entry<String, Long> entry :
-                testTime.entrySet()) {
-            log.info(String.format("%s %d ms", entry.getKey(), entry.getValue()));
-        }
+    public static void showTimeLog() {
+        log.info(logTimeString.toString());
     }
+
+    @Rule
+    public Stopwatch stopwatch = new Stopwatch() {
+        @Override
+        protected void succeeded(long nanos, Description description) {
+            logInfo(description, "succeeded", nanos);
+        }
+
+        @Override
+        protected void failed(long nanos, Throwable e, Description description) {
+            logInfo(description, "failed", nanos);
+        }
+
+        @Override
+        protected void skipped(long nanos, AssumptionViolatedException e, Description description) {
+            logInfo(description, "skipped", nanos);
+        }
+    };
+
 
     @Autowired
     private MealService service;
