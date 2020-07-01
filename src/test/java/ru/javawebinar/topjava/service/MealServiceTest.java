@@ -37,29 +37,25 @@ public class MealServiceTest {
     private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
     private static final StringBuilder logTimeString = new StringBuilder();
 
-    private static void logInfo(Description description, long nanos) {
-        String testName = description.getMethodName();
-        log.info(String.format("Test %s %d ms",
-                testName, TimeUnit.NANOSECONDS.toMillis(nanos)));
-        logTimeString.append(String.format("Test %30s %6d ms\n",
-                testName, TimeUnit.NANOSECONDS.toMillis(nanos)));
-    }
-
-    @AfterClass
-    public static void showTimeLog() {
-        log.info(logTimeString.toString());
-    }
+    @Autowired
+    private MealService service;
 
     @Rule
     public Stopwatch stopwatch = new Stopwatch() {
         @Override
         protected void finished(long nanos, Description description) {
-            logInfo(description, nanos);
+            String testName = description.getMethodName();
+            log.info(String.format("Test %s %d ms",
+                    testName, TimeUnit.NANOSECONDS.toMillis(nanos)));
+            logTimeString.append(String.format("Test %30s %6d ms\n",
+                    testName, TimeUnit.NANOSECONDS.toMillis(nanos)));
         }
     };
 
-    @Autowired
-    private MealService service;
+    @AfterClass
+    public static void showTimeLog() {
+        log.info(logTimeString.toString());
+    }
 
     @Test
     public void delete() throws Exception {
