@@ -47,7 +47,8 @@ public class DataJpaUserRepository implements UserRepository {
     @Transactional
     @Override
     public User getUserWithMeals(int id) {
-        @NotNull User user = get(id);
+        User user = get(id);
+        if (user == null) return null;
         user.getMeals().size();
         return user;
     }
