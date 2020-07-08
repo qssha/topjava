@@ -2,9 +2,11 @@ package ru.javawebinar.topjava.repository.datajpa;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Repository
@@ -42,8 +44,11 @@ public class DataJpaUserRepository implements UserRepository {
         return crudRepository.findAll(SORT_NAME_EMAIL);
     }
 
-    public User getWithMeals(int id) {
-        User user = crudRepository.findById(id).orElse(null);
-        return null;
+    @Transactional
+    @Override
+    public User getUserWithMeals(int id) {
+        @NotNull User user = get(id);
+        user.getMeals().size();
+        return user;
     }
 }

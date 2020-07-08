@@ -14,7 +14,7 @@ import static ru.javawebinar.topjava.util.DateTimeUtil.atStartOfNextDayOrMax;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
-public abstract class MealService {
+public class MealService {
 
     private final MealRepository repository;
 
@@ -46,5 +46,9 @@ public abstract class MealService {
     public Meal create(Meal meal, int userId) {
         Assert.notNull(meal, "meal must not be null");
         return repository.save(meal, userId);
+    }
+
+    public Meal getMealWithUser(int id, int userId) {
+        return repository.getMealWithUser(id, userId);
     }
 }
