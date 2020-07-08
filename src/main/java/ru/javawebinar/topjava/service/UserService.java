@@ -13,7 +13,7 @@ import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFound;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
-public class UserService {
+public abstract class UserService {
 
     private final UserRepository repository;
 
