@@ -10,7 +10,7 @@
 
 <section>
     <h2>Meals</h2>
-    <form method="get"><dl>
+    <form method="get" action="${pageContext.request.contextPath}/meals/filter"><dl>
             <dt>From Date (inclusive):</dt>
             <dd><input type="date" name="startDate" value="${param.startDate}"></dd>
         </dl>
@@ -52,8 +52,8 @@
                 </td>
                 <td>${meal.description}</td>
                 <td>${meal.calories}</td>
-                <td><a href="meals/update/${meal.id}">Update</a></td>
-                <td><a href="meals/delete/${meal.id}">Delete</a></td>
+                <td><a href="meals/update?id=${meal.id}">Update</a></td>
+                <td><a href="meals/delete?id=${meal.id}">Delete</a></td>
             </tr>
         </c:forEach>
     </table>
