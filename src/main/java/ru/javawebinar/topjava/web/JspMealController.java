@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,60 +23,51 @@ import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
 
 @Controller
 @RequestMapping("/meals")
-public class JspMealController {
+public class JspMealController extends MealRestController {
 
-    @Autowired
-    private MealRestController mealController;
+    public JspMealController(MealService service) {
+        super(service);
+    }
 
     @GetMapping("")
     public String getAll(Model model) {
-        model.addAttribute("meals", mealController.getAll());
+        model.addAttribute("meals", getAll());
         return "meals";
     }
 
-    @GetMapping("/delete")
-    public String delete(HttpServletRequest request) {
-        int id = getId(request);
-        mealController.delete(id);
-        return "redirect:/meals";
-    }
-
-    @GetMapping("/create")
-    public String createGet(HttpServletRequest request) {
-        request.setAttribute("meal",
-                new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000));
-        request.setAttribute("action", "create");
-        return "mealForm";
-    }
-
-    @PostMapping("/create")
-    public String createPost(HttpServletRequest request) throws UnsupportedEncodingException {
-        request.setCharacterEncoding("UTF-8");
-        Meal meal = new Meal(
-                LocalDateTime.parse(request.getParameter("dateTime")),
-                request.getParameter("description"),
-                Integer.parseInt(request.getParameter("calories")));
-        mealController.create(meal);
-        return "redirect:/meals";
-    }
-
-    @GetMapping("/update")
-    public String update(HttpServletRequest request) {
-        Meal meal = mealController.get(getId(request));
-        request.setAttribute("meal", meal);
-        request.setAttribute("action", "update");
-        return "mealForm";
-    }
-
-    @PostMapping("/update")
+    @PostMapping("")
     public String updatePost(HttpServletRequest request) throws UnsupportedEncodingException {
         request.setCharacterEncoding("UTF-8");
         Meal meal = new Meal(
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Integer.parseInt(request.getParameter("calories")));
-        mealController.update(meal, getId(request));
+        if ("".equals(request.getParameter("id"))) {
+            create(meal);
+        } else {
+            update(meal, getId(request));
+        }
         return "redirect:/meals";
+    }
+
+    @GetMapping("/delete")
+    public String delete(HttpServletRequest request) {
+        int id = getId(request);
+        delete(id);
+        return "redirect:/meals";
+    }
+
+    @GetMapping("/save")
+    public String save(HttpServletRequest request) {
+        if (null == request.getParameter("id")) {
+            request.setAttribute("meal",
+                    new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000));
+            request.setAttribute("action", "create");
+        } else {
+            request.setAttribute("meal", get(getId(request)));
+            request.setAttribute("action", "update");
+        }
+        return "mealForm";
     }
 
     @GetMapping("/filter")
@@ -84,7 +76,7 @@ public class JspMealController {
         LocalDate endDate = parseLocalDate(request.getParameter("endDate"));
         LocalTime startTime = parseLocalTime(request.getParameter("startTime"));
         LocalTime endTime = parseLocalTime(request.getParameter("endTime"));
-        request.setAttribute("meals", mealController.getBetween(startDate, startTime, endDate, endTime));
+        request.setAttribute("meals", getBetween(startDate, startTime, endDate, endTime));
         return "meals";
     }
 
