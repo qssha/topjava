@@ -84,17 +84,17 @@ public class JdbcUserRepository implements UserRepository {
         } else if (namedParameterJdbcTemplate.update(
                 "UPDATE users SET name=:name, email=:email, password=:password, " +
                         "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", parameterSource) == 0) {
-            jdbcTemplate.update("DELETE from user_roles WHERE user_id=?", user.getId());
-            jdbcTemplate.batchUpdate(
-                    "update user_roles set role=? WHERE user_id=?",
-                    roles,
-                    roles.size(),
-                    (ps, role) -> {
-                        ps.setString(1, role.toString());
-                        ps.setInt(2, user.getId());
-                    });
             return null;
         }
+        jdbcTemplate.update("DELETE from user_roles WHERE user_id=?", user.getId());
+        jdbcTemplate.batchUpdate(
+                "insert into user_roles (user_id, role) VALUES (?,?)",
+                roles,
+                roles.size(),
+                (ps, role) -> {
+                    ps.setInt(1, user.getId());
+                    ps.setString(2, role.toString());
+                });
         return user;
     }
 
