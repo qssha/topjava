@@ -138,6 +138,10 @@ public class User extends AbstractNamedEntity {
         return meals;
     }
 
+    public void addRole(Role role) {
+        roles.add(role);
+    }
+
     @Override
     public String toString() {
         return "User{" +
