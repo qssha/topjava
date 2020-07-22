@@ -1,4 +1,4 @@
-package ru.javawebinar.topjava.web;
+package ru.javawebinar.topjava.web.meal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -59,14 +59,9 @@ public class JspMealController extends MealRestController {
 
     @GetMapping("/save")
     public String save(HttpServletRequest request) {
-        if (null == request.getParameter("id")) {
-            request.setAttribute("meal",
-                    new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000));
-            request.setAttribute("action", "create");
-        } else {
-            request.setAttribute("meal", get(getId(request)));
-            request.setAttribute("action", "update");
-        }
+        request.setAttribute("meal", null == request.getParameter("id") ?
+                new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) : get(getId(request)));
+        request.setAttribute("action", null == request.getParameter("id") ? "create" : "update");
         return "mealForm";
     }
 
