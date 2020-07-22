@@ -42,8 +42,8 @@ abstract public class AbstractServiceTest<T> {
     @Rule
     public Stopwatch stopwatch = TimingRules.STOPWATCH;
 
-    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-    Validator validator = factory.getValidator();
+    private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    private final Validator validator = factory.getValidator();
 
     protected void validate(Collection<T> itemsForValidation) {
         for (T item :
