@@ -35,6 +35,8 @@
         <hibernate-validator.version>6.1.5.Final</hibernate-validator.version>
         <javax-el.version>3.0.1-b11</javax-el.version>
 
+        <javax.validation>2.0.1.Final</javax.validation>
+
         <!--Tools-->
         <ehcache.version>3.8.1</ehcache.version>
     </properties>
@@ -219,6 +221,13 @@
             <artifactId>assertj-core</artifactId>
             <version>${assertj.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>2.0.1.Final</version>
         </dependency>
     </dependencies>
 

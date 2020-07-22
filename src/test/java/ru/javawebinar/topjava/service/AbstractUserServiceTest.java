@@ -1,6 +1,6 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.Assume;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,18 +10,12 @@ import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-import javax.validation.ConstraintViolationException;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
-import ru.javawebinar.topjava.repository.JpaUtil;
+import java.util.*;
 
 import static org.junit.Assert.assertThrows;
-import static ru.javawebinar.topjava.Profiles.JDBC;
 import static ru.javawebinar.topjava.UserTestData.*;
 
-public abstract class AbstractUserServiceTest extends AbstractServiceTest {
+public abstract class AbstractUserServiceTest extends AbstractServiceTest<User> {
 
     @Autowired
     protected UserService service;
@@ -93,12 +87,11 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Test
     public void createWithException() throws Exception {
-        checkJdbcProfile();
-        validateRootCause(() -> service.create(new User(null, "  ", "mail@yandex.ru", "password", Role.USER)), ConstraintViolationException.class);
-        validateRootCause(() -> service.create(new User(null, "User", "  ", "password", Role.USER)), ConstraintViolationException.class);
-        validateRootCause(() -> service.create(new User(null, "User", "mail@yandex.ru", "  ", Role.USER)), ConstraintViolationException.class);
-        validateRootCause(() -> service.create(new User(null, "User", "mail@yandex.ru", "password", 9, true, new Date(), Set.of())), ConstraintViolationException.class);
-        validateRootCause(() -> service.create(new User(null, "User", "mail@yandex.ru", "password", 10001, true, new Date(), Set.of())), ConstraintViolationException.class);
+        validate(List.of(new User(null, "  ", "mail@yandex.ru", "password", Role.USER),
+                new User(null, "User", "  ", "password", Role.USER),
+                new User(null, "User", "mail@yandex.ru", "  ", Role.USER),
+                new User(null, "User", "mail@yandex.ru", "password", 9, true, new Date(), Set.of()),
+                new User(null, "User", "mail@yandex.ru", "password", 10001, true, new Date(), Set.of())));
     }
 
     @Test
