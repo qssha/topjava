@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.service;
 
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.rules.ExternalResource;
@@ -16,13 +17,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.ActiveDbProfileResolver;
 import ru.javawebinar.topjava.TimingRules;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import java.util.Collection;
-import java.util.Set;
+import static org.junit.Assert.assertThrows;
+import static ru.javawebinar.topjava.Profiles.JDBC;
+import static ru.javawebinar.topjava.util.ValidationUtil.getRootCause;
 
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",
@@ -31,7 +32,7 @@ import java.util.Set;
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 @ActiveProfiles(resolver = ActiveDbProfileResolver.class)
-abstract public class AbstractServiceTest<T> {
+abstract public class AbstractServiceTest {
 
     @Autowired
     protected Environment environment;
@@ -45,11 +46,21 @@ abstract public class AbstractServiceTest<T> {
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private final Validator validator = factory.getValidator();
 
-    protected void validate(Collection<T> itemsForValidation) {
-        for (T item :
-                itemsForValidation) {
-            Set<ConstraintViolation<T>> violations = validator.validate(item);
-            Assert.assertFalse(violations.isEmpty());
+    //  Check root cause in JUnit: https://github.com/junit-team/junit4/pull/778
+    public <T extends Throwable> void validateRootCause(Runnable runnable, Class<T> rootExceptionClass) {
+        assertThrows(rootExceptionClass, () -> {
+            try {
+                runnable.run();
+            } catch (Exception e) {
+                throw getRootCause(e);
+            }
+        });
+    }
+
+    protected void checkJdbcProfile() {
+        for (String profile :
+                environment.getActiveProfiles()) {
+            Assume.assumeFalse(profile.equals(JDBC));
         }
     }
 }
