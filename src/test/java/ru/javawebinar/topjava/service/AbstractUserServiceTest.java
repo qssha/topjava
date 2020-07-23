@@ -1,7 +1,6 @@
 package ru.javawebinar.topjava.service;
 
 
-import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +11,12 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
-import java.util.*;
+import java.util.Date;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertThrows;
-import static ru.javawebinar.topjava.Profiles.JDBC;
 import static ru.javawebinar.topjava.UserTestData.*;
 
 public abstract class AbstractUserServiceTest extends AbstractServiceTest {
