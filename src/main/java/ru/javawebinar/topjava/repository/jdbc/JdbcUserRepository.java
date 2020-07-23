@@ -5,7 +5,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ParameterizedPreparedStatementSetter;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -16,7 +15,6 @@ import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -48,7 +46,7 @@ public class JdbcUserRepository implements UserRepository {
     public static class UserExtractor implements ResultSetExtractor<List<User>> {
         @Override
         public List<User> extractData(ResultSet rs) throws SQLException, DataAccessException {
-            Map<Integer, User> users = new HashMap<>();
+            Map<Integer, User> users = new LinkedHashMap<>();
             while (rs.next()) {
                 int id = rs.getInt("id");
                 if (!users.containsKey(id)) {
@@ -67,7 +65,7 @@ public class JdbcUserRepository implements UserRepository {
     @Override
     @Transactional
     public User save(User user) {
-       BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
+        BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
         List<Role> roles = new ArrayList<>(user.getRoles());
 
         if (user.isNew()) {
@@ -81,20 +79,22 @@ public class JdbcUserRepository implements UserRepository {
                         ps.setString(2, role.toString());
                     });
             user.setId(newKey.intValue());
-        } else if (namedParameterJdbcTemplate.update(
-                "UPDATE users SET name=:name, email=:email, password=:password, " +
-                        "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", parameterSource) == 0) {
-            return null;
+        } else {
+            if (namedParameterJdbcTemplate.update(
+                    "UPDATE users SET name=:name, email=:email, password=:password, " +
+                            "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", parameterSource) == 0) {
+                return null;
+            }
+            jdbcTemplate.update("DELETE from user_roles WHERE user_id=?", user.getId());
+            jdbcTemplate.batchUpdate(
+                    "insert into user_roles (user_id, role) VALUES (?,?)",
+                    roles,
+                    roles.size(),
+                    (ps, role) -> {
+                        ps.setInt(1, user.getId());
+                        ps.setString(2, role.toString());
+                    });
         }
-        jdbcTemplate.update("DELETE from user_roles WHERE user_id=?", user.getId());
-        jdbcTemplate.batchUpdate(
-                "insert into user_roles (user_id, role) VALUES (?,?)",
-                roles,
-                roles.size(),
-                (ps, role) -> {
-                    ps.setInt(1, user.getId());
-                    ps.setString(2, role.toString());
-                });
         return user;
     }
 

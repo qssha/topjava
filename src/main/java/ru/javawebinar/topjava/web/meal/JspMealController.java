@@ -23,7 +23,7 @@ import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
 
 @Controller
 @RequestMapping("/meals")
-public class JspMealController extends MealRestController {
+public class JspMealController extends BaseMealController {
 
     public JspMealController(MealService service) {
         super(service);
