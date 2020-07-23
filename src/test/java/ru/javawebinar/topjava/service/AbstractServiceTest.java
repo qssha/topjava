@@ -43,9 +43,6 @@ abstract public class AbstractServiceTest {
     @Rule
     public Stopwatch stopwatch = TimingRules.STOPWATCH;
 
-    private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-    private final Validator validator = factory.getValidator();
-
     //  Check root cause in JUnit: https://github.com/junit-team/junit4/pull/778
     public <T extends Throwable> void validateRootCause(Runnable runnable, Class<T> rootExceptionClass) {
         assertThrows(rootExceptionClass, () -> {
@@ -55,12 +52,5 @@ abstract public class AbstractServiceTest {
                 throw getRootCause(e);
             }
         });
-    }
-
-    protected void checkJdbcProfile() {
-        for (String profile :
-                environment.getActiveProfiles()) {
-            Assume.assumeFalse(profile.equals(JDBC));
-        }
     }
 }
