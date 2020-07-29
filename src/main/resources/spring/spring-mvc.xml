@@ -54,8 +54,8 @@
           class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
         <property name="converters">
             <set>
-                <bean class="ru.javawebinar.topjava.web.meal.LocalTimeConverter"/>
-                <bean class="ru.javawebinar.topjava.web.meal.LocalDateConverter"/>
+                <bean class="ru.javawebinar.topjava.converter.LocalTimeConverter"/>
+                <bean class="ru.javawebinar.topjava.converter.LocalDateConverter"/>
             </set>
         </property>
     </bean>
