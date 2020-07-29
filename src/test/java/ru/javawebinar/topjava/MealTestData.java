@@ -34,8 +34,10 @@ public class MealTestData {
     public static final MealTo MEAL1_TO = new MealTo(MEAL1.getId(), MEAL1.getDateTime(), MEAL1.getDescription(), MEAL1.getCalories(), false);
     public static final MealTo MEAL2_TO = new MealTo(MEAL2.getId(), MEAL2.getDateTime(), MEAL2.getDescription(), MEAL2.getCalories(), false);
     public static final MealTo MEAL3_TO = new MealTo(MEAL3.getId(), MEAL3.getDateTime(), MEAL3.getDescription(), MEAL3.getCalories(), false);
+    public static final MealTo MEAL6_TO = new MealTo(MEAL6.getId(), MEAL6.getDateTime(), MEAL6.getDescription(), MEAL6.getCalories(), true);
 
-    public static final List<MealTo> MEAL_TOS_INCLUSIVE = List.of(MEAL3_TO, MEAL2_TO, MEAL1_TO);
+    public static final List<MealTo> MEAL_TOS_BETWEEN_INCLUSIVE = List.of(MEAL3_TO, MEAL2_TO, MEAL1_TO);
+    public static final List<MealTo> MEAL_TOS_BETWEEN = List.of(MEAL6_TO, MEAL2_TO);
 
     public static Meal getNew() {
         return new Meal(null, of(2020, Month.FEBRUARY, 1, 18, 0), "Созданный ужин", 300);
@@ -50,6 +52,10 @@ public class MealTestData {
     }
 
     public static List<MealTo> getTestBetweenInclusiveTos() {
-        return MEAL_TOS_INCLUSIVE;
+        return MEAL_TOS_BETWEEN_INCLUSIVE;
+    }
+
+    public static List<MealTo> getTestBetweenTos() {
+        return MEAL_TOS_BETWEEN;
     }
 }
