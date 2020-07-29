@@ -8,6 +8,7 @@ import java.time.Month;
 import java.util.List;
 
 import static java.time.LocalDateTime.of;
+import static ru.javawebinar.topjava.UserTestData.USER;
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
 public class MealTestData {
@@ -45,7 +46,7 @@ public class MealTestData {
     }
 
     public static List<MealTo> getTestTos() {
-        return MealsUtil.getTos(MEALS, MealsUtil.DEFAULT_CALORIES_PER_DAY);
+        return MealsUtil.getTos(MEALS, USER.getCaloriesPerDay());
     }
 
     public static List<MealTo> getTestBetweenInclusiveTos() {
