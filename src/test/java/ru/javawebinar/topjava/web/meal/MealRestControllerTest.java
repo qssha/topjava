@@ -60,8 +60,8 @@ public class MealRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getBetweenInclusive() throws Exception {
-        String startLocalDateTime =  LocalDateTime.of(2020, Month.JANUARY, 30, 0, 0, 0).format(formatter);
-        String endLocalDateTime =  LocalDateTime.of(2020, Month.JANUARY, 30, 23, 59, 59).format(formatter);
+        String startLocalDateTime = "2020-01-30T00:00:00";
+        String endLocalDateTime = "2020-01-30T23:59:59";
         perform(MockMvcRequestBuilders.get(REST_URL + "filter?start=" + startLocalDateTime
                 + "&end=" + endLocalDateTime))
                 .andExpect(status().isOk())
