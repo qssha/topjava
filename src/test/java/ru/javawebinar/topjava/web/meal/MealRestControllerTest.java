@@ -11,9 +11,6 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -27,7 +24,6 @@ import static ru.javawebinar.topjava.TestUtil.readFromJson;
 public class MealRestControllerTest extends AbstractControllerTest {
 
     private final String REST_URL = MealRestController.REST_URL + '/';
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
     @Autowired
     private MealService mealService;
@@ -62,8 +58,9 @@ public class MealRestControllerTest extends AbstractControllerTest {
     void getBetweenInclusive() throws Exception {
         String startLocalDateTime = "2020-01-30T00:00:00";
         String endLocalDateTime = "2020-01-30T23:59:59";
-        perform(MockMvcRequestBuilders.get(REST_URL + "filter?start=" + startLocalDateTime
-                + "&end=" + endLocalDateTime))
+        perform(MockMvcRequestBuilders.get(REST_URL + "filter")
+                .param("start", startLocalDateTime)
+                .param("end", endLocalDateTime))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
