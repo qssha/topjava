@@ -1,0 +1,44 @@
+### GET request for all meals
+GET http://localhost:8080/topjava/rest/meals
+Accept: application/json
+
+### GET request for all meals between localDates and localTimes
+GET http://localhost:8080/topjava/rest/meals/filter?startDate=2020-01-30&startTime=11:00:00&endDate=2020-01-31&endTime=15:00:00
+Accept: application/json
+
+### GET request for all meals between localDates
+GET http://localhost:8080/topjava/rest/meals/filter?startDate=2020-01-30&endDate=2020-01-30
+Accept: application/json
+
+### DELETE request for meal with id=100007
+DELETE http://localhost:8080/topjava/rest/meals/100007
+Accept: application/json
+
+### GET request for meal with id=100007
+GET http://localhost:8080/topjava/rest/meals/100007
+Accept: application/json
+
+### GET request for meal with id=100005
+GET http://localhost:8080/topjava/rest/meals/100005
+Accept: application/json
+
+### POST request with new meal parameters as json
+POST http://localhost:8080/topjava/rest/meals
+Content-Type: application/json
+
+{
+  "dateTime": "2011-12-03T10:15:30",
+  "description": "Тестовая еда",
+  "calories": 1500
+}
+
+### PUT request with new meal parametres and id for existing meal
+PUT http://localhost:8080/topjava/rest/meals
+Content-Type: application/json
+
+{
+  "id": 100005,
+  "dateTime": "2011-12-03T10:15:30",
+  "description": "Тестовая еда",
+  "calories": 1500
+}
