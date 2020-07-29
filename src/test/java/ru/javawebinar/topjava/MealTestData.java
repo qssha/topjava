@@ -12,6 +12,7 @@ import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
 public class MealTestData {
     public static TestMatcher<Meal> MEAL_MATCHER = TestMatcher.usingFieldsComparator(Meal.class, "user");
+    public static TestMatcher<MealTo> MEALTO_MATCHER = TestMatcher.usingFieldsComparator(MealTo.class);
 
     public static final int NOT_FOUND = 10;
     public static final int MEAL1_ID = START_SEQ + 2;
@@ -29,6 +30,12 @@ public class MealTestData {
 
     public static final List<Meal> MEALS = List.of(MEAL7, MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1);
 
+    public static final MealTo MEAL1_TO = new MealTo(MEAL1.getId(), MEAL1.getDateTime(), MEAL1.getDescription(), MEAL1.getCalories(), false);
+    public static final MealTo MEAL2_TO = new MealTo(MEAL2.getId(), MEAL2.getDateTime(), MEAL2.getDescription(), MEAL2.getCalories(), false);
+    public static final MealTo MEAL3_TO = new MealTo(MEAL3.getId(), MEAL3.getDateTime(), MEAL3.getDescription(), MEAL3.getCalories(), false);
+
+    public static final List<MealTo> MEAL_TOS_INCLUSIVE = List.of(MEAL3_TO, MEAL2_TO, MEAL1_TO);
+
     public static Meal getNew() {
         return new Meal(null, of(2020, Month.FEBRUARY, 1, 18, 0), "Созданный ужин", 300);
     }
@@ -39,5 +46,9 @@ public class MealTestData {
 
     public static List<MealTo> getTestTos() {
         return MealsUtil.getTos(MEALS, MealsUtil.DEFAULT_CALORIES_PER_DAY);
+    }
+
+    public static List<MealTo> getTestBetweenInclusiveTos() {
+        return MEAL_TOS_INCLUSIVE;
     }
 }
