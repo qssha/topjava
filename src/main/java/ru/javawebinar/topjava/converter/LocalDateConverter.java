@@ -10,6 +10,6 @@ import java.time.format.DateTimeFormatter;
 public class LocalDateConverter implements Converter<String, LocalDate> {
     @Override
     public LocalDate convert(String source) {
-        return LocalDate.parse(source, DateTimeFormatter.ISO_LOCAL_DATE);
+        return source.isEmpty() ? null : LocalDate.parse(source, DateTimeFormatter.ISO_LOCAL_DATE);
     }
 }
