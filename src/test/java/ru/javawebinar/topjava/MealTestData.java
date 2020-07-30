@@ -31,10 +31,10 @@ public class MealTestData {
 
     public static final List<Meal> MEALS = List.of(MEAL7, MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1);
 
-    public static final MealTo MEAL1_TO = new MealTo(MEAL1.getId(), MEAL1.getDateTime(), MEAL1.getDescription(), MEAL1.getCalories(), false);
-    public static final MealTo MEAL2_TO = new MealTo(MEAL2.getId(), MEAL2.getDateTime(), MEAL2.getDescription(), MEAL2.getCalories(), false);
-    public static final MealTo MEAL3_TO = new MealTo(MEAL3.getId(), MEAL3.getDateTime(), MEAL3.getDescription(), MEAL3.getCalories(), false);
-    public static final MealTo MEAL6_TO = new MealTo(MEAL6.getId(), MEAL6.getDateTime(), MEAL6.getDescription(), MEAL6.getCalories(), true);
+    public static final MealTo MEAL1_TO = MealsUtil.createTo(MEAL1, false);
+    public static final MealTo MEAL2_TO = MealsUtil.createTo(MEAL2, false);
+    public static final MealTo MEAL3_TO = MealsUtil.createTo(MEAL3, false);
+    public static final MealTo MEAL6_TO = MealsUtil.createTo(MEAL6, true);
 
     public static final List<MealTo> MEAL_TOS_BETWEEN_INCLUSIVE = List.of(MEAL3_TO, MEAL2_TO, MEAL1_TO);
     public static final List<MealTo> MEAL_TOS_BETWEEN = List.of(MEAL6_TO, MEAL2_TO);
