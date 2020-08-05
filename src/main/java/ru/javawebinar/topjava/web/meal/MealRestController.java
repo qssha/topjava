@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealTo;
+import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -64,5 +65,12 @@ public class MealRestController extends AbstractMealController {
             @RequestParam @Nullable LocalDate endDate,
             @RequestParam @Nullable LocalTime endTime) {
         return super.getBetween(startDate, startTime, endDate, endTime);
+    }
+
+    @GetMapping("/with_user/{id}")
+    public Meal getWithUser(@PathVariable int id) {
+        int userId = SecurityUtil.authUserId();
+        log.info("get meal {} with user {}", id, userId);
+        return service.getWithUser(id, userId);
     }
 }
