@@ -20,19 +20,19 @@
                     <div class="row">
                         <div class="offset-1 col-2">
                             <label for="startDate"><spring:message code="meal.startDate"/></label>
-                            <input type="datetime-local" class="form-control" name="startDate" id="startDate" autocomplete="off">
+                            <input type="date" class="form-control" name="startDate" id="startDate" autocomplete="off">
                         </div>
                         <div class="col-2">
                             <label for="endDate"><spring:message code="meal.endDate"/></label>
-                            <input type="datetime-local" class="form-control" name="endDate" id="endDate" autocomplete="off">
+                            <input type="date" class="form-control" name="endDate" id="endDate" autocomplete="off">
                         </div>
                         <div class="offset-2 col-2">
                             <label for="startTime"><spring:message code="meal.startTime"/></label>
-                            <input type="datetime-local" class="form-control" name="startTime" id="startTime" autocomplete="off">
+                            <input type="time" class="form-control" name="startTime" id="startTime" autocomplete="off">
                         </div>
                         <div class="col-2">
                             <label for="endTime"><spring:message code="meal.endTime"/></label>
-                            <input type="datetime-local" class="form-control" name="endTime" id="endTime" autocomplete="off">
+                            <input type="time" class="form-control" name="endTime" id="endTime" autocomplete="off">
                         </div>
                     </div>
                 </form>
@@ -65,7 +65,7 @@
             </thead>
             <c:forEach items="${meals}" var="meal">
                 <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.to.MealTo"/>
-                <tr data-mealExcess="${meal.excess}">
+                <tr data-mealExcess="${meal.excess}" id="${meal.id}">
                     <td>
                             <%--${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}--%>
                             <%--<%=TimeUtil.toString(meal.getDateTime())%>--%>
@@ -75,7 +75,7 @@
                     <td>${meal.description}</td>
                     <td>${meal.calories}</td>
                     <td><a><span class="fa fa-pencil"></span></a></td>
-                    <td><a class="delete" id="${meal.id}"><span class="fa fa-remove"></span></a></td>
+                    <td><a class="delete"><span class="fa fa-remove"></span></a></td>
                 </tr>
             </c:forEach>
         </table>
