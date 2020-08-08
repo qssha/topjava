@@ -16,9 +16,6 @@
 #### get Meals 100003
 `curl -s http://localhost:8080/topjava/rest/profile/meals/100003  --user user@yandex.ru:password`
 
-#### get Meals 100003 with user
-`curl -s http://localhost:8080/topjava/rest/profile/meals/with_user/100003  --user user@yandex.ru:password`
-
 #### filter Meals
 `curl -s "http://localhost:8080/topjava/rest/profile/meals/filter?startDate=2020-01-30&startTime=07:00:00&endDate=2020-01-31&endTime=11:00:00" --user user@yandex.ru:password`
 
