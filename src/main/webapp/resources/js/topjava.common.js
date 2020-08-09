@@ -27,7 +27,7 @@ function deleteRow(id) {
         url: context.ajaxUrl + id,
         type: "DELETE"
     }).done(function () {
-        updateFullOrFilter()
+        updateTable()
         successNoty("Deleted");
     });
 }
@@ -45,7 +45,7 @@ function save() {
         data: form.serialize()
     }).done(function () {
         $("#editRow").modal("hide");
-        updateFullOrFilter()
+        updateTable()
         successNoty("Saved");
     });
 }
@@ -76,12 +76,4 @@ function failNoty(jqXHR) {
         type: "error",
         layout: "bottomRight"
     }).show();
-}
-
-function updateFullOrFilter() {
-    if ($("#filter").val() === undefined) {
-        updateTable()
-    } else {
-        updateFilteredTable()
-    }
 }

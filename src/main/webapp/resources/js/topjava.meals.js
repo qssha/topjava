@@ -35,7 +35,7 @@ $(function () {
     );
 });
 
-function updateFilteredTable() {
+function updateTable() {
     $.ajax({
         url: context.ajaxUrl + "filter",
         type: "GET",
