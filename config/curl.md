@@ -8,7 +8,7 @@
 `curl -s http://localhost:8080/topjava/rest/admin/users/100001 --user admin@gmail.com:admin`
 
 #### get Users 100001 with meals
-`curl -s http://localhost:8080/topjava/rest/admin/users/with_meals/100001 --user admin@gmail.com:admin`
+`curl -s http://localhost:8080/topjava/rest/admin/users/100001/with-meals --user admin@gmail.com:admin`
 
 #### get All Meals
 `curl -s http://localhost:8080/topjava/rest/profile/meals --user user@yandex.ru:password`

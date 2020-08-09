@@ -66,11 +66,4 @@ public class MealRestController extends AbstractMealController {
             @RequestParam @Nullable LocalTime endTime) {
         return super.getBetween(startDate, startTime, endDate, endTime);
     }
-
-    @GetMapping("/with_user/{id}")
-    public Meal getWithUser(@PathVariable int id) {
-        int userId = SecurityUtil.authUserId();
-        log.info("get meal {} with user {}", id, userId);
-        return service.getWithUser(id, userId);
-    }
 }
