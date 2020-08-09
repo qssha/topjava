@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping(MealUIController.REST_AJAX_URL)
 public class MealUIController extends AbstractMealController {
-    static final String REST_AJAX_URL = "/rest/ajax/profile/meals";
+    static final String REST_AJAX_URL = "/ajax/profile/meals";
 
     @Override
     @GetMapping
