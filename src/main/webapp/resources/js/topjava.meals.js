@@ -46,5 +46,6 @@ function updateFilteredTable() {
 }
 
 function clearFilter() {
+    $("#filter").trigger('reset')
     updateTable()
 }
