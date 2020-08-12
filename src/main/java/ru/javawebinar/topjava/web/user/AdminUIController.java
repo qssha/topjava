@@ -11,7 +11,6 @@ import ru.javawebinar.topjava.util.BindingUtil;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin/users")
