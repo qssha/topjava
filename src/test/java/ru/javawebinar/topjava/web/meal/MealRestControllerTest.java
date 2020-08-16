@@ -60,7 +60,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isNoContent());
 
         Meal actual = mealService.get(MEAL1_ID, USER_ID);
-        updated.setId(actual.getId());
+        updated.setId(MEAL1_ID);
         MEAL_MATCHER.assertMatch(actual, updated);
     }
 
