@@ -12,7 +12,7 @@ function makeEditable(ctx) {
 }
 
 function convertDate(date) {
-    return date.substring(0, 10) + " " + date.substring(11);
+    return date.substring(0, 10) + " " + date.substring(11, date.length - 3);
 }
 
 function add() {

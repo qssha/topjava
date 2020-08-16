@@ -24,15 +24,15 @@ $(function () {
     });
     $('#startTime').datetimepicker({
         datepicker:false,
-        format:'h:i'
+        format:'H:i'
     });
     $('#endTime').datetimepicker({
         datepicker:false,
-        format:'h:i'
+        format:'H:i'
     });
 
     $('#dateTime').datetimepicker({
-        format: 'Y-m-d h:i'
+        format: 'Y-m-d H:i'
     });
 
     makeEditable({
