@@ -23,5 +23,4 @@
     <script type="text/javascript" src="webjars/noty/3.1.4/lib/noty.min.js" defer></script>
 
     <script src="webjars/datetimepicker/2.5.20-1/build/jquery.datetimepicker.full.min.js" defer></script>
-    <script src="webjars/jquery-ui/1.12.0/jquery-ui.js" defer></script>
 </head>
