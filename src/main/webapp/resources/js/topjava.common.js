@@ -11,6 +11,10 @@ function makeEditable(ctx) {
     $.ajaxSetup({cache: false});
 }
 
+function convertDate(date) {
+    return date.substring(0, 10) + " " + date.substring(11);
+}
+
 function add() {
     $("#modalTitle").html(i18n["addTitle"]);
     form.find(":input").val("");
@@ -22,7 +26,7 @@ function updateRow(id) {
     $.get(context.ajaxUrl + id, function (data) {
         $.each(data, function (key, value) {
             if (key === "dateTime") {
-                value =  value.substring(0, 10) + " " + value.substring(11);
+                value =  convertDate(value);
             }
             form.find("input[name='" + key + "']").val(value);
         });
