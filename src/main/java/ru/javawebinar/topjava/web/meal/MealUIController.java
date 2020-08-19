@@ -38,8 +38,8 @@ public class MealUIController extends AbstractMealController {
         super.delete(id);
     }
 
-    @PostMapping(consumes = "application/json")
-    public void createOrUpdate(@Valid @RequestBody Meal meal) {
+    @PostMapping
+    public void createOrUpdate(@Valid Meal meal) {
         if (meal.isNew()) {
             super.create(meal);
         } else {
