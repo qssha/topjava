@@ -146,4 +146,15 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(USER_WITH_MEALS_MATCHER.contentJson(ADMIN));
     }
+
+    @Test
+    void validateCorruptedJson() throws Exception {
+        String corruptedJson = JsonUtil.writeValue(getUpdated()).substring(10);
+        perform(MockMvcRequestBuilders.put(REST_URL + USER_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(ADMIN))
+                .content(corruptedJson))
+                .andExpect(status().isUnprocessableEntity())
+                .andDo(print());
+    }
 }

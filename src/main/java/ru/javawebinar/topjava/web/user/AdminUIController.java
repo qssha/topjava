@@ -36,8 +36,8 @@ public class AdminUIController extends AbstractUserController {
         super.delete(id);
     }
 
-    @PostMapping
-    public void createOrUpdate(@Valid UserTo userTo, BindingResult result) {
+    @PostMapping(consumes = "application/json")
+    public void createOrUpdate(@Valid @RequestBody UserTo userTo) {
         if (userTo.isNew()) {
             super.create(userTo);
         } else {
