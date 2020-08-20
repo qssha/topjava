@@ -42,8 +42,14 @@ public class ExceptionInfoHandler {
     }
 
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)  // 422
+    @ExceptionHandler({BindException.class})
+    public ErrorInfo bindError(HttpServletRequest req, BindException e) {
+        return logAndGetBindResult(req, e, false, VALIDATION_ERROR);
+    }
+
+    @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)  // 422
     @ExceptionHandler({IllegalRequestDataException.class, MethodArgumentTypeMismatchException.class,
-            HttpMessageNotReadableException.class, BindException.class})
+            HttpMessageNotReadableException.class})
     public ErrorInfo illegalRequestDataError(HttpServletRequest req, Exception e) {
         return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR);
     }
@@ -57,11 +63,22 @@ public class ExceptionInfoHandler {
     //    https://stackoverflow.com/questions/538870/should-private-helper-methods-be-static-if-they-can-be-static
     private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, ErrorType errorType) {
         Throwable rootCause = ValidationUtil.getRootCause(e);
-        if (logException) {
-            log.error(errorType + " at request " + req.getRequestURL(), rootCause);
-        } else {
-            log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause.toString());
-        }
+        logError(req, rootCause.toString(), logException, errorType);
         return new ErrorInfo(req.getRequestURL(), errorType, rootCause.toString());
+    }
+
+    private static ErrorInfo logAndGetBindResult(HttpServletRequest req,
+                                                 BindException e, boolean logException, ErrorType errorType) {
+        String bindResult = ValidationUtil.getErrors(e);
+        logError(req, bindResult, logException, errorType);
+        return new ErrorInfo(req.getRequestURL(), errorType, bindResult);
+    }
+
+    private static void logError(HttpServletRequest req, String rootCause, boolean logException, ErrorType errorType) {
+        if (logException) {
+            log.error(errorType + " at request " + req.getRequestURL() + " " + rootCause);
+        } else {
+            log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause);
+        }
     }
 }
