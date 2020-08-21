@@ -148,13 +148,14 @@ class AdminRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void validateCorruptedJson() throws Exception {
-        String corruptedJson = JsonUtil.writeValue(getUpdated()).substring(10);
-        perform(MockMvcRequestBuilders.put(REST_URL + USER_ID)
+    void validateJson() throws Exception {
+        User newUser = getNew();
+        newUser.setName(null);
+        perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
-                .content(corruptedJson))
-                .andExpect(status().isUnprocessableEntity())
-                .andDo(print());
+                .content(UserTestData.jsonWithPassword(newUser, "newPass")))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
     }
 }

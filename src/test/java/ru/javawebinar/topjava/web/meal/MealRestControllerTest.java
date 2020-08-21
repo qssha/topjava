@@ -127,12 +127,14 @@ class MealRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void validateCorruptedJson() throws Exception {
-        String corruptedJson = JsonUtil.writeValue(MealTestData.getUpdated()).substring(10);
-        perform(MockMvcRequestBuilders.put(REST_URL + MEAL1_ID).contentType(MediaType.APPLICATION_JSON)
-                .content(corruptedJson)
+    void validateJson() throws Exception {
+        Meal newMeal = MealTestData.getNew();
+        newMeal.setCalories(null);
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newMeal))
                 .with(userHttpBasic(USER)))
-                .andExpect(status().isUnprocessableEntity())
-                .andDo(print());
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
     }
 }
