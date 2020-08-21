@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javawebinar.topjava.View;
 import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.util.exception.UserAlreadyExistsException;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -32,6 +33,9 @@ public class AdminRestController extends AbstractUserController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> createWithLocation(@Valid @RequestBody User user) {
+        if (super.getByMail(user.getEmail()) != null) {
+            throw new UserAlreadyExistsException("User with this email already exists");
+        }
         User created = super.create(user);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")

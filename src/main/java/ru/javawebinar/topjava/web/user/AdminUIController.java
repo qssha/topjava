@@ -2,16 +2,13 @@ package ru.javawebinar.topjava.web.user;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.UserTo;
-import ru.javawebinar.topjava.util.ValidationUtil;
+import ru.javawebinar.topjava.util.exception.UserAlreadyExistsException;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin/users")
@@ -39,6 +36,9 @@ public class AdminUIController extends AbstractUserController {
     @PostMapping
     public void createOrUpdate(@Valid UserTo userTo) {
         if (userTo.isNew()) {
+            if (super.getByMail(userTo.getEmail()) != null) {
+                throw new UserAlreadyExistsException("User with this email already exists");
+            }
             super.create(userTo);
         } else {
             super.update(userTo, userTo.id());
