@@ -2,11 +2,13 @@ package ru.javawebinar.topjava.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.util.CollectionUtils;
+import ru.javawebinar.topjava.View;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -38,7 +40,7 @@ public class User extends AbstractNamedEntity {
     private String email;
 
     @Column(name = "password", nullable = false)
-    @NotBlank
+    @NotBlank(groups = View.JsonREST.class)
     @Size(min = 5, max = 100)
     // https://stackoverflow.com/a/12505165/548473
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
